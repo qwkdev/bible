@@ -1,0 +1,328 @@
+<head>
+	<link href="{{ url_for('static', filename='vars.css') }}" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+	<style>
+		/*                                 var(--verse-min-column-width) */
+		@media only screen and (max-width: 500px) {
+			:root {
+				--verse-min-column-width: 99vw;
+			}
+		}
+		*::selection {
+			background: var(--sel-color);
+		}
+		body {
+			margin: 0;
+			background: var(--background-color);
+		}
+		.copy-text {
+			display: none !important;
+		}
+		.verses {
+			padding-top: var(--divider-size);
+			display: grid;
+			grid-template-columns: 1fr;
+			width: 100%;
+			gap: var(--divider-size);
+			background: linear-gradient(to right, var(--background-color) 0%, var(--divider-color) 50%, var(--background-color) 100%);
+
+			.vcol {
+				width: 100%;
+				height: min-content;
+				display: grid;
+				/* gap: var(--divider-size) 0; */
+				/* background: var(--background-color); */
+			}
+
+			.verse {
+				width: 100%;
+				background: var(--background-color);
+				position: relative;
+				padding: var(--verse-margin) 0;
+				margin-bottom: var(--divider-size);
+
+				table {
+                    margin: var(--table-margin-top) auto;
+					border-collapse: collapse;
+
+					td {
+						padding: var(--table-cell-padding-top) var(--table-cell-padding-side);
+						border: var(--table-border-size) solid var(--text-color);
+						font-family: "Inter";
+						font-weight: 400;
+						color: var(--text-color);
+						text-align: center;
+						font-size: var(--verse-font-size);
+					}
+				}
+
+				p {
+					font-family: "Inter";
+					font-weight: 400;
+					color: var(--text-color);
+					padding: 0;
+					margin: 0;
+
+					sup {
+						font-size: var(--verse-number-font-size);
+						margin-right: .5vh;
+						color: var(--text-color);
+					}
+					b {
+						color: var(--bold-color);
+						font-weight: 400;
+					}
+					b::selection {
+						background: var(--sel-bold-color) !important;
+					}
+				}
+				td::selection {
+					background: var(--sel-td-color);
+				}
+				br::selection {
+					background: transparent !important;
+				}
+
+				.ref {
+					position: absolute;
+					top: var(--info-margin-top);
+					left: var(--info-margin-side);
+					font-size: var(--book-info-font-size);
+					width: var(--book-info-width);
+				}
+				.ch {
+					position: absolute;
+					top: var(--info-margin-top);
+					right: var(--info-margin-side);
+					font-size: var(--book-info-font-size);
+					width: var(--book-info-width);
+					text-align: right;
+				}
+				.vf {
+					position: absolute;
+					bottom: var(--info-margin-top);
+					left: var(--info-margin-side);
+					font-size: var(--footnotes-font-size);
+					line-height: var(--footnotes-line-height);
+					width: var(--footnotes-width);
+				}
+				.cf {
+					position: absolute;
+					bottom: var(--info-margin-top);
+					right: var(--info-margin-side);
+					font-size: var(--footnotes-font-size);
+					line-height: var(--footnotes-line-height);
+					width: var(--footnotes-width);
+					text-align: right;
+				}
+
+				.text {
+					width: var(--verse-width);
+					margin: 0 auto;
+					line-height: var(--verse-line-height);
+					font-size: var(--verse-font-size);
+				}
+			}
+
+			.ilverse {
+				width: 100%;
+				background: var(--background-color);
+				position: relative;
+				padding: var(--verse-margin) 0;
+				margin-bottom: var(--divider-size);
+
+				table {
+                    margin: var(--table-margin-top) auto;
+					border-collapse: collapse;
+
+					td {
+						padding: var(--table-cell-padding-top) var(--table-cell-padding-side);
+						border: var(--table-border-size) solid var(--text-color);;
+						font-family: "Inter";
+						font-weight: 400;
+						color: var(--text-color);
+						text-align: center;
+						font-size: var(--verse-font-size);
+					}
+				}
+
+				p {
+					font-family: "Inter";
+					font-weight: 400;
+					color: var(--text-color);
+					padding: 0;
+					margin: 0;
+
+					sup {
+						font-size: var(--verse-number-font-size);
+						margin: 0 .25vw 0 0;
+						color: var(--text-color);
+					}
+					b {
+						color: var(--bold-color);
+						font-weight: 400;
+					}
+					b::selection {
+						background: var(--sel-bold-color) !important;
+					}
+				}
+				td::selection {
+					background: var(--sel-td-color) !important;
+				}
+				br::selection {
+					background: transparent !important;
+				}
+
+				.ref {
+					position: absolute;
+					top: var(--info-margin-top);
+					left: var(--info-margin-side);
+					font-size: var(--book-info-font-size);
+					width: var(--book-info-width);
+				}
+				.ch {
+					position: absolute;
+					top: var(--info-margin-top);
+					right: var(--info-margin-side);
+					font-size: var(--book-info-font-size);
+					width: var(--book-info-width);
+					text-align: right;
+				}
+				.vf {
+					position: absolute;
+					bottom: var(--info-margin-top);
+					left: var(--info-margin-side);
+					font-size: var(--footnotes-font-size);
+					line-height: var(--footnotes-line-height);
+					width: var(--footnotes-width);
+				}
+				.cf {
+					position: absolute;
+					bottom: var(--info-margin-top);
+					right: var(--info-margin-side);
+					font-size: var(--footnotes-font-size);
+					line-height: var(--footnotes-line-height);
+					width: var(--footnotes-width);
+					text-align: right;
+				}
+
+				.hebrew {
+					direction: rtl;
+				}
+				.text {
+					width: var(--verse-width);
+					margin: 0 auto;
+					line-height: var(--verse-line-height);
+					font-size: var(--verse-font-size);
+					grid-template-columns: auto;
+
+					.word {
+						width: min-content;
+						display: inline-block;
+						margin-right: var(--ilverse-word-space);
+
+						.pn {
+							color: var(--ilverse-pn-color);
+							font-size: var(--ilverse-pn-font-size);
+							line-height: var(--ilverse-pn-height);
+							height: var(--ilverse-pn-height);
+							width: max-content !important;
+							display: block
+						}
+						.txt {
+							color: var(--ilverse-txt-color);
+							font-size: var(--ilverse-txt-font-size);
+							line-height: var(--ilverse-txt-height);
+							height: var(--ilverse-txt-height);
+							width: max-content !important;
+						}
+						.eng {
+							color: var(--ilverse-eng-color);
+							font-size: var(--ilverse-eng-font-size);
+							line-height: var(--ilverse-eng-height);
+							height: var(--ilverse-eng-height);
+							width: max-content !important;
+							display: block
+						}
+					}
+				}
+			}
+
+			button {
+				position: absolute;
+				bottom: var(--info-margin-top);
+				width: var(--button-size);
+				height: var(--button-size);
+				background-color: var(--background-color);
+				border: 1px solid #ffffff;  /* svg stroke colour */
+				border-radius: var(--button-border-radius);
+				transition: var(--button-fade);
+			}
+			button:hover {
+				transform: scale(var(--button-scale));
+			}
+		}
+
+	</style>
+</head>
+<body>
+	<div class="verses">
+		{% for j in verses %}
+		    <div class="vcol" style="grid-template-columns: repeat(auto-fill, minmax(max(var(--verse-min-column-width), 100%/{{j['columns']}}), 1fr));">
+				{% for i in j['verses'] %}
+					{% if i['lang'] == 'hebrew' or i['lang'] == 'greek' %}
+						<div class="ilverse">
+							<p class="ref">{{i['book']}} {{i['chapter']}}:{{i['verse-number-text']}} ({{i['translation']}})</p>
+							<p class="ch">{{i['book-desc']}}</p>
+							<p class="vf">{{i['footnotes']}}</p>
+							<p class="cf">{{i['chapter-footnotes']}}</p>
+							<div class="text{% if i['lang'] == 'hebrew' %} hebrew{% endif %}">
+								<div class="word" style="margin-right: 0;">
+									<p class="pn">&#x2800;</p>
+									<p class="txt">{{i['verse-number-text']}}</p>
+									<p class="eng">&#x2800;</p>
+								</div>
+								{% for j in i['verse'] %}
+									<div class="word">
+										<p class="pn">{% if j[0] == '' %}&#x2800;{% else %}{{j[0] | safe}}{% endif %}</p>
+										<p class="txt">{% if j[1] == '' %}&#x2800;{% else %}{{j[1] | safe}}{% endif %}</p>
+										<p class="eng">{% if j[2] == '' %}&#x2800;{% else %}{{j[2] | safe}}{% endif %}</p>
+									</div>
+								{% endfor %}
+							</div>
+							<p class="copy-text" id="copy-text-{{i['vlid']}}">{{i['copy-text'] | safe}}</p>
+							<button onclick="copy(`{{i['vlid']}}`)" style="right: calc(50% + var(--button-half-gap));"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15 3V6.4C15 6.96005 15 7.24008 15.109 7.45399C15.2049 7.64215 15.3578 7.79513 15.546 7.89101C15.7599 8 16.0399 8 16.6 8H20M10 8H6C4.89543 8 4 8.89543 4 10V19C4 20.1046 4.89543 21 6 21H12C13.1046 21 14 20.1046 14 19V16M16 3H13.2C12.0799 3 11.5198 3 11.092 3.21799C10.7157 3.40973 10.4097 3.71569 10.218 4.09202C10 4.51984 10 5.0799 10 6.2V12.8C10 13.9201 10 14.4802 10.218 14.908C10.4097 15.2843 10.7157 15.5903 11.092 15.782C11.5198 16 12.0799 16 13.2 16H16.8C17.9201 16 18.4802 16 18.908 15.782C19.2843 15.5903 19.5903 15.2843 19.782 14.908C20 14.4802 20 13.9201 20 12.8V7L16 3Z" stroke="#ffffff" stroke-width="2" stroke-linejoin="round"></path> </g></svg></button>
+							<button onclick="navigator.clipboard.writeText(`{{i['link']}}`)" style="left: calc(50% + var(--button-half-gap));"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(-45)" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M14 7H16C18.7614 7 21 9.23858 21 12C21 14.7614 18.7614 17 16 17H14M10 7H8C5.23858 7 3 9.23858 3 12C3 14.7614 5.23858 17 8 17H10M8 12H16" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></button>
+						</div>
+					{% else %}
+						<div class="verse">
+							{% if i['lang'] == 'None' %}
+								<p class="ref">{{i['translation']}}</p>
+								<p class="text">
+									Cannot find verse.
+								</p>
+							{% else %}
+								<p class="ref">{{i['book']}} {{i['chapter']}}:{{i['verse-number-text']}} ({{i['translation']}})</p>
+								<p class="ch">{{i['book-desc']}}</p>
+								<p class="vf">{{i['footnotes']}}</p>
+								<p class="cf">{{i['chapter-footnotes']}}</p>
+								<p class="text">
+									<sup>{{i['verse-number-text']}}</sup>{{i['verse'] | safe}}
+								</p>
+								<p class="copy-text" id="copy-text-{{i['vlid']}}">{{i['copy-text'] | safe}}</p>
+								<button onclick="copy(`{{i['vlid']}}`)" style="right: calc(50% + var(--button-half-gap));"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15 3V6.4C15 6.96005 15 7.24008 15.109 7.45399C15.2049 7.64215 15.3578 7.79513 15.546 7.89101C15.7599 8 16.0399 8 16.6 8H20M10 8H6C4.89543 8 4 8.89543 4 10V19C4 20.1046 4.89543 21 6 21H12C13.1046 21 14 20.1046 14 19V16M16 3H13.2C12.0799 3 11.5198 3 11.092 3.21799C10.7157 3.40973 10.4097 3.71569 10.218 4.09202C10 4.51984 10 5.0799 10 6.2V12.8C10 13.9201 10 14.4802 10.218 14.908C10.4097 15.2843 10.7157 15.5903 11.092 15.782C11.5198 16 12.0799 16 13.2 16H16.8C17.9201 16 18.4802 16 18.908 15.782C19.2843 15.5903 19.5903 15.2843 19.782 14.908C20 14.4802 20 13.9201 20 12.8V7L16 3Z" stroke="#ffffff" stroke-width="2" stroke-linejoin="round"></path> </g></svg></button>
+								<button onclick="navigator.clipboard.writeText(`{{i['link']}}`)" style="left: calc(50% + var(--button-half-gap));"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(-45)" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M14 7H16C18.7614 7 21 9.23858 21 12C21 14.7614 18.7614 17 16 17H14M10 7H8C5.23858 7 3 9.23858 3 12C3 14.7614 5.23858 17 8 17H10M8 12H16" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></button>
+							{% endif %}
+						</div>
+					{% endif %}
+				{% endfor %}
+			</div>
+		{% endfor %}
+	</div>
+	<script>
+		function copy(id) {
+			navigator.clipboard.writeText(document.getElementById(`copy-text-${id}`).innerText);
+			// alert("Copied to clipboard");
+		};
+	</script>
+</body>

@@ -1,0 +1,111 @@
+<head>
+	<link href="{{ url_for('static', filename='vars.css') }}" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+	<style>
+		*::selection {
+			background: var(--sel-color);
+		}
+		*:focus {
+			outline: none;
+		}
+		body {
+			margin: 0;
+			background: var(--background-color);
+		}
+		input {
+			/* font-family: "Inter"; */
+			background-color: var(--vb-input-bg-color);
+			color: var(--text-color);
+			position: absolute;
+			top: var(--vb-input-top);
+			left: 50%;
+			transform: translate(-50%, 0);
+			border: none;
+			width: var(--vb-input-width);
+			height: var(--vb-input-height);
+			border-radius: var(--vb-input-border-radius);
+			font-size: var(--vb-input-font-size);
+			padding: 0 var(--vb-input-padding);
+			resize: none;
+		}
+		#verses {
+			position: absolute;
+			top: calc(var(--vb-input-top) + var(--vb-input-height) + var(--vb-verses-top));
+			left: 50%;
+			transform: translate(-50%, 0);
+			border: none;
+			width: var(--vb-input-width);
+			height: calc(100vh - var(--vb-input-top) - var(--vb-verses-top) - var(--vb-input-top) - var(--vb-input-height));
+			overflow-y: scroll;
+		}
+		.verse {
+			font-family: "Inter";
+			font-size: var(--vb-verse-font-size);
+            line-height: var(--vb-verse-height);
+			height: var(--vb-verse-height);
+            background-color: var(--vb-input-bg-color);
+			color: var(--text-color);
+			display: inline-block;
+			border: none;
+			border-radius: var(--vb-verse-height);
+			padding: 0 var(--vb-verse-padding);
+			margin: 0 var(--vb-verse-gap-side) var(--vb-verse-gap-top) 0;
+			transition: background-color var(--vb-verse-fade);
+
+			p {
+				display: none;
+			}
+		}
+		.verse:hover {
+			background-color: var(--vb-verse-hover);
+		}
+
+	</style>
+</head>
+<body>
+	<input type="text" id="input">
+	<div id="verses"></div>
+	<script>
+		function fixverse(verse) {
+			const parts = verse.split(':');
+			if (parts[0][0] === '!') {
+				var atr = '🄰 '
+				var tr = parts[0].slice(1).split(';')
+			} else if (parts[0][0] === '=') {
+				var atr = '🅂 '
+				var tr = parts[0].slice(1).split(';')
+			} else {
+				var atr = ''
+				var tr = parts[0].split(';')
+			}
+			tr = tr.map(item => item === '' ? 'IL' : item.toUpperCase())
+			return `${atr}${tr.join(', ')} | ${parts[1][0].toUpperCase()}${parts[1].slice(1).toLowerCase()} ${parts.slice(2).join(':')}`
+		}
+		var vnum = -1;
+		const verse = document.getElementById('input');
+		const verses = document.getElementById('verses');
+		verse.addEventListener('keydown', function(event) {
+			if (event.key === 'Enter') {
+				if (verse.value === '') {
+					window.location.href = `verse/${Array.from(document.getElementsByClassName('raw')).map(item => item.innerText).join(',')}`;
+				} else {
+					verse.value.split(',').forEach(vv => {
+						var v = document.createElement('button');
+						var txt = document.createTextNode(fixverse(vv));
+						v.appendChild(txt);
+						var vp = document.createElement('p');
+						vp.classList.add('raw');
+						var ptxt = document.createTextNode(vv);
+						vp.appendChild(ptxt);
+						v.appendChild(vp);
+						v.classList.add('verse');
+						v.id = `v${++vnum}`;
+						v.onclick = function() { this.remove(); }
+						verses.appendChild(v);
+					});
+					verse.value = '';
+				}
+			}
+		});
+	</script>
+</body>

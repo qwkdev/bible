@@ -1,0 +1,70 @@
+:root {
+	--background-color: #000000;
+	--text-color: #ffffff;
+	--divider-color: #ffffff;
+	--bold-color: #ff0000;
+	--ilverse-pn-color: #606062;
+	--ilverse-txt-color: #ffffff;
+	--ilverse-eng-color: #ff0000;
+
+	--sel-color: #404042;
+	--sel-bold-color: #300000;
+	--sel-td-color: #303032;
+
+	--divider-size: 1px;
+
+	--info-margin-top: 1vh;
+	--info-margin-side: 2vh;
+	--book-info-font-size: 2vh;
+	--book-info-line-height: 2.5vh;
+	--book-info-width: 43%;
+	--footnotes-font-size: 1.5vh;
+	--footnotes-line-height: 2vh;
+	--footnotes-width: 40%;
+
+	--verse-min-column-width: 500px;  /* UPDATE THE HARDCODED VALUE IN THE MEDIA QUERY DECLARATION TOO, SINCE THEY DONT SUPPORT CSS	VARIABLES */
+
+	--verse-width: 65%;
+	--verse-margin: 7vh;
+	--verse-number-font-size: 2vh;
+	--verse-font-size: 3.5vh;
+	--verse-line-height: 4.25vh;
+
+	--table-margin-top: .5vh;
+	--table-cell-padding-top: .5vh;
+	--table-cell-padding-side: 1vh;
+	--table-border-size: .2vh;
+
+	--ilverse-pn-font-size: 1.75vh;
+	--ilverse-pn-height: 2.5vh;
+	--ilverse-txt-font-size: 4vh;
+	--ilverse-txt-height: 5vh;
+	--ilverse-eng-font-size: 1.75vh;
+	--ilverse-eng-height: 2.5vh;
+	--ilverse-word-space: .5vw;
+
+	--button-size: 3vh;
+	--button-half-gap: .25vh;
+	--button-border-radius: .5vh;
+	--button-fade: .2s;
+	--button-scale: 1.1;
+
+	--vb-input-bg-color: #303032;
+	--vb-verse-hover: #aa4042;
+
+	--vb-input-top: 10vh;
+	--vb-input-width: 80vw;
+	--vb-input-height: 20vh;
+	--vb-input-border-radius: 20vh;
+	--vb-input-font-size: 10vh;
+	--vb-input-padding: 5vw;
+
+	--vb-verse-font-size: 3vh;
+	--vb-verse-height: 5vh;
+	--vb-verse-padding: 1vw;
+	--vb-verse-gap-top: 1vh;
+	--vb-verse-gap-side: .9vh;
+	--vb-verse-fade: .5s;
+
+	--vb-verses-top: 5vh;
+}
