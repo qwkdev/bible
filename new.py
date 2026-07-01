@@ -100,7 +100,7 @@ def main(translation: str, interlinear: bool=False) -> None:
 	except Exception: pass
 	for n, b in text.items():
 		with open(f'text/{translation}/{n}.json', 'w', encoding='utf-8') as f:
-			json.dump(b, f)
+			json.dump(b, f, separators=(',', ':'))
 
 [main(t) for t in translations]
 print('Done')
