@@ -45,6 +45,11 @@ _ = {
 	"footnotes": "",
 	"chapter-footnotes": "John 1:1-5"}
 
+def rstrip(array: list, delimiter) -> list:
+	for i in range(len(array)-1, -1, -1):
+		if array[i] != delimiter:
+			return array[:i+1]
+
 def fn(s: str, force: bool=False) -> str | None:
 	if not s:
 		if force: 
@@ -83,9 +88,10 @@ def main(translation: str, interlinear: bool=False) -> None:
 		if v['chapter'] not in text[bk]:
 			text[bk][v['chapter']] = {}
 
-		text[bk][v['chapter']][v['verse-number-text']] = [
+		text[bk][v['chapter']][v['verse-number-text']] = rstrip([
 			v['verse'], fn(v['footnotes']), fn(v['chapter-footnotes'])
-		]
+		], None)
+
 		
 	for b, d in books.items():
 		if len(d) > 1: print('Multiple Book Descriptions:', b, d)
