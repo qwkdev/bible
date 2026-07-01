@@ -147,7 +147,7 @@ def verse(verse_code):
 	# AND ALSO FIX THE THING WHERE LANGUAGE ISNT COMING UP IDK WHY
 	# TODO: MAYBE Filter duplicate verses (text not index) before viewing (only if together)
 	# So if we had verse1 verse1 verse2 it would remove 1 verse1 (even if different verse indexes), but not here: verse1 verse2 verse1
-	# TODO: Create settings menu in template and save settings in cookies (or some any way to save settings)
+	# TODO: Create settings menu in template and save settings in cookies (or some way to save settings)
 
 	# rq.get(f'https://xdroid.net/api/message?k={os.getenv("XDROID")}&t={getip(request)}&c={verse_code}&u=https://iplocation.io/ip/{getip(request)}')
 
