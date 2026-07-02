@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style>
+		:root {
+			--bg: #000;
+			--div: #fff;
+
+			--text: #fff;
+			--text-s: #404042;
+			--bold: #f00;
+			--bold-s: #300;
+
+			--il-p: #606062;
+			--il-t: #fff;
+			--il-e: #f00;
+
+			--u: 1.2vw;
+		}
+
+		*[hidden] {
+			display: none !important;
+		}
+
+		body {
+			margin: 0;
+			background: var(--bg);
+		}
+
+		@media only screen and (min-aspect-ratio: 1/1) {
+			:root {
+				--u: 1vh;
+			}
+		}
+	</style>
+</head>
+<body>
+	<svg hidden>
+		<symbol id="icon-copy" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<path d="M15 3V6.4C15 6.96005 15 7.24008 15.109 7.45399C15.2049 7.64215 15.3578 7.79513 15.546 7.89101C15.7599 8 16.0399 8 16.6 8H20M10 8H6C4.89543 8 4 8.89543 4 10V19C4 20.1046 4.89543 21 6 21H12C13.1046 21 14 20.1046 14 19V16M16 3H13.2C12.0799 3 11.5198 3 11.092 3.21799C10.7157 3.40973 10.4097 3.71569 10.218 4.09202C10 4.51984 10 5.0799 10 6.2V12.8C10 13.9201 10 14.4802 10.218 14.908C10.4097 15.2843 10.7157 15.5903 11.092 15.782C11.5198 16 12.0799 16 13.2 16H16.8C17.9201 16 18.4802 16 18.908 15.782C19.2843 15.5903 19.5903 15.2843 19.782 14.908C20 14.4802 20 13.9201 20 12.8V7L16 3Z" stroke-width="2" stroke-linejoin="round"></path>
+		</symbol>
+		<symbol id="icon-link" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(-45)">
+			<path d="M14 7H16C18.7614 7 21 9.23858 21 12C21 14.7614 18.7614 17 16 17H14M10 7H8C5.23858 7 3 9.23858 3 12C3 14.7614 5.23858 17 8 17H10M8 12H16" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round"></path>
+		</symbol>
+	</svg>
+
+	<div id="verses">
+		<div class="column">
+			<div class="verse">
+				<p class="ref">Book C:V (Translation)</p>
+				<p class="ch">Heading</p>
+				<p class="vf">Footnotes</p>
+				<p class="cf">Chapter Footnotes</p>
+				<p class="text"><sup>#</sup>Text</p>
+				<p class="copy-text" hidden>Copyable Text</p>
+				<p class="copy-link" hidden>Copyable Link Part</p>
+				<div class="buttons">
+					<button onclick="copy(this)">
+						<svg><use href="#icon-copy"/></svg>
+					</button>
+					<button onclick="copyLink(this)">
+						<svg><use href="#icon-link"/></svg>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
