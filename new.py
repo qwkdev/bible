@@ -76,7 +76,7 @@ def main(translation: str, interlinear: bool=False) -> None:
 				'short-canon': v['short-canon'],
 				'canon': v['canon'],
 				'name': v['book'],
-				'desc': fn(v['book-desc']),
+				'desc': fn(v['book-desc'].replace('The Gospel According to', 'The Holy Gospel According to')),
 				'interlinear': interlinear
 			}}
 
@@ -102,5 +102,5 @@ def main(translation: str, interlinear: bool=False) -> None:
 		with open(f'text/{translation}/{n}.json', 'w', encoding='utf-8') as f:
 			json.dump(b, f, separators=(',', ':'))
 
-[main(t) for t in translations]
+[main(t, t == 'il') for t in translations]
 print('Done')
