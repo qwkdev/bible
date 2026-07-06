@@ -4,6 +4,8 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Document</title>
+
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
 	<style>
 		:root {
 			--bg: #000;
@@ -18,7 +20,12 @@
 			--il-t: #fff;
 			--il-e: #f00;
 
-			--u: 1.2vw;
+			--u: 1.5vw;
+			--min-width: 50vh;
+
+			--size: calc(3.5 * var(--u));
+			--number-size: calc(2 * var(--u));
+			--line-height: calc(4.25 * var(--u));
 		}
 
 		*[hidden] {
@@ -28,6 +35,144 @@
 		body {
 			margin: 0;
 			background: var(--bg);
+		}
+		
+		#verses {
+			--cols: 1;
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(max(var(--min-width), 100%/var(--cols)), 1fr));
+		}
+
+		.verse {
+			width: 100%;
+			background: var(--bg);
+
+			position: relative;
+			padding: calc(7 * var(--u)) 0;
+
+			border-bottom: 1px solid transparent;
+			border-image: linear-gradient(to right, var(--bg) 0%, var(--div) 50%, var(--bg) 100%) 1;
+
+			/* &:last-child {
+				border: none;
+			} */
+
+			table {
+				margin: calc(.5 * var(--u)) auto;
+				border-collapse: collapse;
+
+				td {
+					padding: calc(.5 * var(--u)) calc(1 * var(--u));
+					border: calc(.2 * var(--u)) solid var(--text);
+					font-family: "Inter";
+					font-weight: 400;
+					color: var(--text);
+					text-align: center;
+					font-size: var(--size);
+				}
+				&::selection {
+					background: var(--text-s);
+				}
+			}
+
+			p {
+				font-family: "Inter";
+				font-weight: 400;
+				color: var(--text);
+				padding: 0;
+				margin: 0;
+
+				&::selection {
+					background: var(--text-s);
+				}
+
+				sup {
+					font-size: var(--number-size);
+					margin-right: calc(.5 * var(--u));
+					color: var(--text);
+
+					&::selection {
+						background: var(--text-s);
+					}
+				}
+				b {
+					color: var(--bold);
+					font-weight: 400;
+
+					&::selection {
+						background: var(--bold-s);
+					}
+				}
+				
+			}
+			br::selection {
+				background: transparent !important;
+			}
+
+			.ref, .ch, .vf, .cf {
+				position: absolute;
+			}
+			.ref, .ch {
+				font-size: calc(2 * var(--u));
+				line-height: calc(2.5 * var(--u));
+				top: calc(1 * var(--u));
+			}
+			.vf, .cf {
+				font-size: calc(1.5 * var(--u));
+				line-height: calc(2 * var(--u));
+				bottom: calc(1 * var(--u));
+			}
+			.ref, .vf {
+				left: calc(2 * var(--u));
+			}
+			.ch, .cf {
+				right: calc(2 * var(--u));
+				text-align: right;
+			}
+
+			.text {
+				width: 65%;
+				margin: 0 auto;
+				line-height: var(--line-height);
+				font-size: var(--size);
+			}
+
+			.buttons {
+				position: absolute;
+				bottom: calc(1 * var(--u));
+				left: 50%;
+				transform: translateX(-50%);
+				width: max-content;
+				
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				gap: calc(.2 * var(--u));
+
+				button {
+					width: calc(3 * var(--u));
+					height: calc(3 * var(--u));
+					background: var(--bg);
+					border: 1px solid var(--text);
+					border-radius: calc(.5 * var(--u));
+					transition: .2s;
+
+					&:hover {
+						transform: scale(1.1);
+					}
+
+					svg {
+						width: 100%;
+						height: 100%;
+						stroke: var(--text);
+					}
+				}
+			}
+		}
+
+		#icon-link {
+			transform: rotate(-45deg) translate(-55%, 15%);
 		}
 
 		@media only screen and (min-aspect-ratio: 1/1) {
@@ -42,31 +187,74 @@
 		<symbol id="icon-copy" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 			<path d="M15 3V6.4C15 6.96005 15 7.24008 15.109 7.45399C15.2049 7.64215 15.3578 7.79513 15.546 7.89101C15.7599 8 16.0399 8 16.6 8H20M10 8H6C4.89543 8 4 8.89543 4 10V19C4 20.1046 4.89543 21 6 21H12C13.1046 21 14 20.1046 14 19V16M16 3H13.2C12.0799 3 11.5198 3 11.092 3.21799C10.7157 3.40973 10.4097 3.71569 10.218 4.09202C10 4.51984 10 5.0799 10 6.2V12.8C10 13.9201 10 14.4802 10.218 14.908C10.4097 15.2843 10.7157 15.5903 11.092 15.782C11.5198 16 12.0799 16 13.2 16H16.8C17.9201 16 18.4802 16 18.908 15.782C19.2843 15.5903 19.5903 15.2843 19.782 14.908C20 14.4802 20 13.9201 20 12.8V7L16 3Z" stroke-width="2" stroke-linejoin="round"></path>
 		</symbol>
-		<symbol id="icon-link" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(-45)">
-			<path d="M14 7H16C18.7614 7 21 9.23858 21 12C21 14.7614 18.7614 17 16 17H14M10 7H8C5.23858 7 3 9.23858 3 12C3 14.7614 5.23858 17 8 17H10M8 12H16" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round"></path>
+		<symbol id="icon-link" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<path d="M14 7H16C18.7614 7 21 9.23858 21 12C21 14.7614 18.7614 17 16 17H14M10 7H8C5.23858 7 3 9.23858 3 12C3 14.7614 5.23858 17 8 17H10M8 12H16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
 		</symbol>
 	</svg>
 
-	<div id="verses">
-		<div class="column">
-			<div class="verse">
-				<p class="ref">Book C:V (Translation)</p>
-				<p class="ch">Heading</p>
-				<p class="vf">Footnotes</p>
-				<p class="cf">Chapter Footnotes</p>
-				<p class="text"><sup>#</sup>Text</p>
-				<p class="copy-text" hidden>Copyable Text</p>
-				<p class="copy-link" hidden>Copyable Link Part</p>
-				<div class="buttons">
-					<button onclick="copy(this)">
-						<svg><use href="#icon-copy"/></svg>
-					</button>
-					<button onclick="copyLink(this)">
-						<svg><use href="#icon-link"/></svg>
-					</button>
-				</div>
+	<div id="verses" style="--cols: 3">
+		<div class="verse">
+			<p class="ref">Book C:V (Translation)</p>
+			<p class="ch">Heading</p>
+			<p class="vf">Footnotes</p>
+			<p class="cf">Chapter Footnotes</p>
+			<p class="text"><sup>#</sup>Text</p>
+			<p class="copy-text" hidden>Copyable Text</p>
+			<p class="copy-link" hidden>Copyable Link Part</p>
+			<div class="buttons">
+				<button onclick="copy(this)">
+					<svg><use href="#icon-copy"/></svg>
+				</button>
+				<button onclick="copyLink(this)">
+					<svg><use href="#icon-link"/></svg>
+				</button>
 			</div>
 		</div>
 	</div>
+
+	<script>
+		const BOOKS = {"gn":"gen","genesis":"gen","gen":"gen","ge":"gen","ex":"exo","exod":"exo","exo":"exo","exodus":"exo","leviticus":"lev","le":"lev","lv":"lev","lev":"lev","num":"num","nu":"num","numbers":"num","nb":"num","nm":"num","deuteronomy":"deu","dt":"deu","de":"deu","deu":"deu","deut":"deu","jsh":"jos","jos":"jos","joshua":"jos","josh":"jos","jdgs":"jdg","judges":"jdg","jg":"jdg","jdg":"jdg","judg":"jdg","ru":"rut","ruth":"rut","rut":"rut","rth":"rut","1s":"1sa","1stsam":"1sa","1sm":"1sa","1samuel":"1sa","1sam":"1sa","firstsam":"1sa","1stsamuel":"1sa","firstsamuel":"1sa","1sa":"1sa","2s":"2sa","secondsamuel":"2sa","2ndsamuel":"2sa","2sam":"2sa","2sa":"2sa","secondsam":"2sa","2ndsam":"2sa","2samuel":"2sa","2sm":"2sa","firstkgs":"1ki","1stkings":"1ki","1stkgs":"1ki","1kings":"1ki","1kgs":"1ki","1k":"1ki","1ki":"1ki","1kin":"1ki","firstkings":"1ki","2k":"2ki","2ndkings":"2ki","2kin":"2ki","2ki":"2ki","2kgs":"2ki","2kings":"2ki","secondkings":"2ki","secondkgs":"2ki","2ndkgs":"2ki","1chron":"1ch","1chr":"1ch","1ch":"1ch","1stchron":"1ch","firstchron":"1ch","1stchronicles":"1ch","1chronicles":"1ch","firstchronicles":"1ch","2ndchronicles":"2ch","2chron":"2ch","2ch":"2ch","2chr":"2ch","2ndchron":"2ch","2chronicles":"2ch","secondchronicles":"2ch","secondchron":"2ch","ezr":"ezr","ezra":"ezr","ez":"ezr","neh":"neh","ne":"neh","nehemiah":"neh","addes":"est","restofesther":"est","aes":"est","est":"est","additionstoesther":"est","addesth":"est","therestofesther":"est","job":"job","jb":"job","psa":"psa","pss":"psa","psm":"psa","psalms":"psa","psalm":"psa","ps":"psa","pslm":"psa","prov":"pro","pro":"pro","proverbs":"pro","pr":"pro","prv":"pro","ecc":"ecc","eccles":"ecc","eccle":"ecc","qoh":"ecc","ecclesiastes":"ecc","ec":"ecc","canticleofcanticles":"sng","so":"sng","sng":"sng","canticles":"sng","sos":"sng","songofsolomon":"sng","cant":"sng","songofsongs":"sng","song":"sng","isa":"isa","is":"isa","isaiah":"isa","jr":"jer","jeremiah":"jer","jer":"jer","je":"jer","lam":"lam","la":"lam","lamentations":"lam","ezek":"ezk","ezk":"ezk","eze":"ezk","ezekiel":"ezk","daniel":"dan","dn":"dan","dan":"dan","da":"dan","ho":"hos","hosea":"hos","hos":"hos","joel":"jol","jl":"jol","jol":"jol","amo":"amo","am":"amo","amos":"amo","obadiah":"oba","ob":"oba","oba":"oba","obad":"oba","jonah":"jon","jon":"jon","jnh":"jon","micah":"mic","mc":"mic","mic":"mic","nah":"nam","nahum":"nam","na":"nam","nam":"nam","hab":"hab","hb":"hab","habakkuk":"hab","zp":"zep","zephaniah":"zep","zep":"zep","zeph":"zep","haggai":"hag","hag":"hag","hg":"hag","zech":"zec","zc":"zec","zechariah":"zec","zec":"zec","ml":"mal","mal":"mal","malachi":"mal","mat":"mat","matthew":"mat","matt":"mat","mt":"mat","mrk":"mrk","mark":"mrk","mk":"mrk","mr":"mrk","mar":"mrk","luk":"luk","lk":"luk","luke":"luk","joh":"jhn","jn":"jhn","john":"jhn","jhn":"jhn","ac":"act","act":"act","acts":"act","rom":"rom","rm":"rom","romans":"rom","ro":"rom","1corinthians":"1co","1cor":"1co","1co":"1co","firstcorinthians":"1co","1stcorinthians":"1co","2cor":"2co","2ndcorinthians":"2co","2corinthians":"2co","2co":"2co","secondcorinthians":"2co","ga":"gal","gal":"gal","galatians":"gal","eph":"eph","ephes":"eph","ephesians":"eph","philippians":"php","phil":"php","php":"php","pp":"php","colossians":"col","col":"col","co":"col","firstthess":"1th","1thessalonians":"1th","1thess":"1th","1thes":"1th","1stthessalonians":"1th","1stthess":"1th","1th":"1th","firstthessalonians":"1th","2thes":"2th","2ndthessalonians":"2th","2thess":"2th","2ndthess":"2th","2thessalonians":"2th","secondthess":"2th","secondthessalonians":"2th","2th":"2th","1ti":"1ti","firsttimothy":"1ti","firsttim":"1ti","1timothy":"1ti","1tim":"1ti","1sttimothy":"1ti","1sttim":"1ti","2timothy":"2ti","2ndtimothy":"2ti","2ti":"2ti","2tim":"2ti","secondtimothy":"2ti","2ndtim":"2ti","secondtim":"2ti","ti":"tit","tit":"tit","titus":"tit","pm":"phm","phm":"phm","philemon":"phm","philem":"phm","heb":"heb","hebrews":"heb","jas":"jas","jm":"jas","james":"jas","1pe":"1pe","firstpeter":"1pe","1pt":"1pe","1p":"1pe","1peter":"1pe","1stpeter":"1pe","1pet":"1pe","2pt":"2pe","2pe":"2pe","2peter":"2pe","2pet":"2pe","2p":"2pe","secondpeter":"2pe","2ndpeter":"2pe","1jn":"1jn","1j":"1jn","1jhn":"1jn","1john":"1jn","1jo":"1jn","1stjohn":"1jn","firstjohn":"1jn","1joh":"1jn","secondjohn":"2jn","2jhn":"2jn","2j":"2jn","2jo":"2jn","2jn":"2jn","2joh":"2jn","2john":"2jn","2ndjohn":"2jn","3jn":"3jn","3rdjohn":"3jn","3joh":"3jn","3john":"3jn","3j":"3jn","3jo":"3jn","thirdjohn":"3jn","3jhn":"3jn","jd":"jud","jude":"jud","jud":"jud","therevelation":"rev","rev":"rev","re":"rev","revelation":"rev","mostcommon:rev":"rev","tob":"tob","tb":"tob","tobit":"tob","jdth":"jdt","judith":"jdt","jdt":"jdt","jth":"jdt","ws":"wis","wisdom":"wis","wis":"wis","wisd.ofsol":"wis","wisdomofsolomon":"wis","sir":"sir","ecclus":"sir","ecclesiasticus":"sir","bar":"bar","baruch":"bar","1mac":"1ma","1m":"1ma","1macc":"1ma","1stmaccabees":"1ma","1maccabees":"1ma","firstmaccabees":"1ma","1ma":"1ma","2mac":"2ma","2maccabees":"2ma","2macc":"2ma","2ma":"2ma","2ndmaccabees":"2ma","2m":"2ma","secondmaccabees":"2ma"};
+		const BOOKKEYS = Object.keys(BOOKS);
+		const cache = {};
+
+		function parseVerses(rawvc) {
+			let final = [];
+			for (const vc of rawvc.split(',')) {
+				let temp = [];
+				let code = [];
+				let bookInfo = [];
+				let verseInfo = [];
+				let decoded = {
+					translations: [],
+					book: null,
+					chapters: [],
+					verses: []
+				};
+
+				for (const [n, part] of vc.split(':').entries()) {
+					if (!part && n !== 0) throw Error();
+					if (!/^\d*$/.test(str) && n <= 1) {
+						bookInfo.push(part);
+					} else {
+						verseInfo.push(...vc.split(':').slice(n))
+						break;
+					}
+				}
+
+				if (bookInfo.length < 1) throw Error();
+				if (!BOOKKEYS.includes(bookInfo.at(-1))) throw Error();
+
+				if (bookInfo.length === 1) decoded.translations.push('il', 'gnbdk');
+				else decoded.translations.push(...bookInfo[0].split(';'))
+				decoded.book = bookInfo.at(-1).split(';')[0];
+
+				if (verseInfo.length < 1) throw Error();
+				//! TODO
+
+				final.push(...temp);
+			}
+		}
+		
+	</script>
 </body>
 </html>
