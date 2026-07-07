@@ -59,6 +59,9 @@ def fn(s: str, force: bool=False) -> str | None:
 			return None
 	return s
 
+def check(b, s):
+	if not s.isdigit(): print(b, s)
+
 def main(translation: str, interlinear: bool=False) -> None:
 	print(f'Formatting {translation}...')
 	with open(f'oldjson/{translation}.json', encoding='utf-8') as f:
@@ -87,6 +90,9 @@ def main(translation: str, interlinear: bool=False) -> None:
 
 		if v['chapter'] not in text[bk]:
 			text[bk][v['chapter']] = {}
+
+		# check(bk, v['chapter'])
+		# check(bk, v['verse-number-text'])
 
 		text[bk][v['chapter']][v['verse-number-text']] = rstrip([
 			v['verse'], fn(v['footnotes']), fn(v['chapter-footnotes'])
