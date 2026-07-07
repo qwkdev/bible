@@ -193,7 +193,7 @@
 	</svg>
 
 	<div id="verses" style="--cols: 3">
-		<div class="verse">
+		<div id="verse-template" class="verse" hidden>
 			<p class="ref">Book C:V (Translation)</p>
 			<p class="ch">Heading</p>
 			<p class="vf">Footnotes</p>
@@ -291,12 +291,20 @@
 
 		//! TODO: Test, i.e. nlt:numbers
 		//! TODO: Add translation/chapter/verse info for html
-		function findVerse(c, n) {
+		async function verseBuild(t, b, c, vn, v) {
+			return [
+				t, b,
+				(await getBook(t, b)).info,
+				c, vn,
+				...Array.from({ length: 4 }, (_, i) => v[i] || null)
+			];
+		}
+		function findVerse(t, b, cn, c, n) {
 			if (!c) return undefined;
-			if (c[n]) return c[n];
+			if (c[n]) return verseBuild(t, b, cn, n, c[n]);
 
 			for (const k in Object.keys(c).filter(v => v.includes('-'))) {
-				if (parseNumbers(k).includes(Number(n))) return c[k];
+				if (parseNumbers(k).includes(Number(n))) return verseBuild(t, b, cn, k, c[k]);
 			}
 
 			return undefined;
@@ -305,7 +313,7 @@
 			let final = [];
 			for (const n of v)
 				for (const ct of t)
-					final.push(findVerse((await getBook(ct, b))?.[c], n));
+					final.push(await findVerse(ct, b, c, (await getBook(ct, b))?.[c], n));
 			return final;
 		}
 		async function scrapeChapters(t, b, c) {
@@ -335,8 +343,37 @@
 			else return await scrapeBook(...v);
 		}
 	
-		function showVerse(v) {
+		function verseToText(verse, interlinear=false) {
+			if (interlinear)
+				return verse.map(v => [v[1], v[2] ? `(${v[2]})`: null].filter(e => e).join(' ')).join(' ');
+			
+			let v = verse.replace(/<b>|<\/b>/g, '');
+		}
 
+		function showVerse(parent, v) {
+			const verse = document.getElementById(`${v[2].interlinear ? 'il' : ''}verse-template`).cloneNode(true);
+			verse.removeAttribute('id');
+			
+			_={
+				"short-canon": "ot",
+				"canon": "Old Testament",
+				"name": "Numbers",
+				"desc": "The Fourth Book of Moses called Numbers",
+				"interlinear": false
+			};
+
+			verse.querySelector('ref').innerText = `${v[2].name} ${v[3]}:${v[4]}`;
+			verse.querySelector('ch').innerText = v[6] || '';
+			verse.querySelector('vf').innerText = v[7] || '';
+			verse.querySelector('cf').innerText = v[8] || '';
+
+			if (v[2].interlinear) {}
+			else verse.querySelector('text').innerText = v[5] || '';
+
+			verse.querySelector('copy-text').innerText = verseToText(v[5], v[2].interlinear);
+			verse.querySelector('copy-link').innerText = ``;
+
+			parent.appendChild(verse);
 		}
 	</script>
 </body>

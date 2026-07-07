@@ -138,7 +138,15 @@ def verse_to_copy_text(verse: str | list, include: list[int]=[0, 1, 1]) -> str:
 		ver = ''.join([i[0] if not i[1] else '\n'+verse_table_format([j[4:-5].split('</td><td>') for j in i[0][4:-5].split('</tr><tr>')])+'\n' for i in ver])
 		return ver
 	elif isinstance(verse, list):
-		return ' '.join([' '.join([j for j in [None if i[1] == '' or not include[1] else i[1], None if i[0] == '' or not include[0] else f'[{i[0]}]', None if i[2] == '' or not include[2] else f'({i[2]})'] if j is not None]) for i in verse])
+		return ' '.join([
+			' '.join([
+				j for j in [
+					None if i[1] == '' or not include[1] else i[1],
+					None if i[0] == '' or not include[0] else f'[{i[0]}]',
+					None if i[2] == '' or not include[2] else f'({i[2]})'
+				] if j is not None
+			])
+		for i in verse])
 	return ''
 
 @app.route('/verse/<verse_code>')

@@ -95,7 +95,7 @@ def main(translation: str, interlinear: bool=False) -> None:
 		# check(bk, v['verse-number-text'])
 
 		text[bk][v['chapter']][v['verse-number-text']] = rstrip([
-			v['verse'], fn(v['footnotes']), fn(v['chapter-footnotes'])
+			v['verse'], fn(v['heading']), fn(v['footnotes']), fn(v['chapter-footnotes'])
 		], None)
 
 		
