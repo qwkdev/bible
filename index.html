@@ -387,7 +387,7 @@
 					t.map(async ct => Object.keys(
 						(await getBook(ct, b))?.[n]
 					))
-				)).flat());
+				)).flat().flatMap(v => parseNumbers(v)));
 				final.push(...await scrapeVerses(t, b, n, verses));
 			}
 			return final;
