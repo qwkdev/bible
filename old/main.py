@@ -11,7 +11,7 @@ cwd = Path(__file__).parent.resolve()
 app = Flask('BIBLE', template_folder=cwd/'templates', static_folder=cwd/'static')
 app.secret_key = 'key'
 
-with open(cwd/'../index.json') as f:
+with open(cwd/'../oldindex.json') as f:
 	index = json.load(f)
 with open(cwd/'../book.json') as f:
 	bookcodes = json.load(f)
