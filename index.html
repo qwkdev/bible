@@ -469,7 +469,7 @@
 			}
 		}
 
-		const code = window.location.search.slice(1);
+		const code = decodeURIComponent(window.location.search.slice(1));
 		init(code);
 	</script>
 </body>
