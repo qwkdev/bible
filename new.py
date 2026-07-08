@@ -80,7 +80,8 @@ def main(translation: str, interlinear: bool=False) -> None:
 				'canon': v['canon'],
 				'name': v['book'],
 				'desc': fn(v['book-desc'].replace('The Gospel According to', 'The Holy Gospel According to')),
-				'interlinear': interlinear
+				'interlinear': interlinear,
+				'rtl': interlinear and v['short-canon'] == 'ot'
 			}}
 
 			books[bk] = set()

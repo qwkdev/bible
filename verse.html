@@ -37,7 +37,7 @@
 			background: var(--bg);
 		}
 		
-		#verses {
+		.verses {
 			--cols: 1;
 			display: grid;
 			grid-template-columns: repeat(auto-fill, minmax(max(var(--min-width), 100%/var(--cols)), 1fr));
@@ -46,9 +46,13 @@
 		.verse {
 			width: 100%;
 			background: var(--bg);
+			padding: calc(1 * var(--u)) calc(2 * var(--u));
+			box-sizing: border-box;
 
 			position: relative;
-			padding: calc(7 * var(--u)) 0;
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			grid-template-rows: auto 1fr auto;
 
 			border-bottom: 1px solid transparent;
 			border-image: linear-gradient(to right, var(--bg) 0%, var(--div) 50%, var(--bg) 100%) 1;
@@ -110,39 +114,86 @@
 			}
 
 			.ref, .ch, .vf, .cf {
-				position: absolute;
+				max-width: 90%;
 			}
 			.ref, .ch {
 				font-size: calc(2 * var(--u));
 				line-height: calc(2.5 * var(--u));
-				top: calc(1 * var(--u));
+				grid-row: 1;
+				align-self: start;
 			}
 			.vf, .cf {
 				font-size: calc(1.5 * var(--u));
 				line-height: calc(2 * var(--u));
-				bottom: calc(1 * var(--u));
+				grid-row: 3;
+				align-self: end;
 			}
 			.ref, .vf {
-				left: calc(2 * var(--u));
+				grid-column: 1;
+				justify-self: start;
 			}
 			.ch, .cf {
-				right: calc(2 * var(--u));
+				grid-column: 2;
+				justify-self: end;
 				text-align: right;
 			}
 
 			.text {
 				width: 65%;
-				margin: 0 auto;
+				margin: calc(3 * var(--u)) auto calc(3 * var(--u)) auto;
 				line-height: var(--line-height);
 				font-size: var(--size);
+
+				grid-column: 1 / 3;
+				grid-row: 2;
+			}
+
+			.rtl {
+				direction: rtl;
+
+				.word:first-child {
+					margin-right: 0;
+				}
+			}
+			.il {
+				grid-template-columns: auto;
+
+				.word {
+					width: min-content;
+					display: inline-block;
+					margin-right: calc(1.2 * var(--u));
+
+					.p, .e {
+						font-size: calc(1.75 * var(--u));
+						line-height: calc(2.5 * var(--u));
+						height: calc(2.5 * var(--u));
+						width: max-content !important;
+						display: block;
+					}
+					.t {
+						color: var(--il-t);
+						font-size: calc(4 * var(--u));
+						line-height: calc(5 * var(--u));
+						height: calc(5 * var(--u));
+						width: max-content !important;
+					}
+					.p {
+						color: var(--il-p);
+					}
+					.e {
+						color: var(--il-e);
+					}
+				}
 			}
 
 			.buttons {
-				position: absolute;
-				bottom: calc(1 * var(--u));
-				left: 50%;
-				transform: translateX(-50%);
+				grid-column: 1 / 3;
+				grid-row: 3;
+				align-self: end;
+				justify-self: center;
+
 				width: max-content;
+				height: calc(4 * var(--u));
 				
 				display: flex;
 				align-items: center;
@@ -172,7 +223,7 @@
 		}
 
 		#icon-link {
-			transform: rotate(-45deg) translate(-55%, 15%);
+			transform: rotate(-45deg) translate(-58%, 13%);
 		}
 
 		@media only screen and (min-aspect-ratio: 1/1) {
@@ -192,25 +243,25 @@
 		</symbol>
 	</svg>
 
-	<div id="verses" style="--cols: 3">
-		<div id="verse-template" class="verse" hidden>
-			<p class="ref">Book C:V (Translation)</p>
-			<p class="ch">Heading</p>
-			<p class="vf">Footnotes</p>
-			<p class="cf">Chapter Footnotes</p>
-			<p class="text"><sup>#</sup>Text</p>
-			<p class="copy-text" hidden>Copyable Text</p>
-			<p class="copy-link" hidden>Copyable Link Part</p>
-			<div class="buttons">
-				<button onclick="copy(this)">
-					<svg><use href="#icon-copy"/></svg>
-				</button>
-				<button onclick="copyLink(this)">
-					<svg><use href="#icon-link"/></svg>
-				</button>
-			</div>
+	<div id="verse-template" class="verse" hidden>
+		<p class="ref"></p>
+		<p class="ch"></p>
+		<p class="vf"></p>
+		<p class="cf"></p>
+		<p class="text"></p>
+		<p class="copy-text" hidden></p>
+		<p class="copy-link" hidden></p>
+		<div class="buttons">
+			<button onclick="copy(this)">
+				<svg><use href="#icon-copy"/></svg>
+			</button>
+			<button onclick="copyLink(this)">
+				<svg><use href="#icon-link"/></svg>
+			</button>
 		</div>
 	</div>
+
+	<main id="texts"></main>
 
 	<script>
 		const BOOKS = {"gn":"gen","genesis":"gen","gen":"gen","ge":"gen","ex":"exo","exod":"exo","exo":"exo","exodus":"exo","leviticus":"lev","le":"lev","lv":"lev","lev":"lev","num":"num","nu":"num","numbers":"num","nb":"num","nm":"num","deuteronomy":"deu","dt":"deu","de":"deu","deu":"deu","deut":"deu","jsh":"jos","jos":"jos","joshua":"jos","josh":"jos","jdgs":"jdg","judges":"jdg","jg":"jdg","jdg":"jdg","judg":"jdg","ru":"rut","ruth":"rut","rut":"rut","rth":"rut","1s":"1sa","1stsam":"1sa","1sm":"1sa","1samuel":"1sa","1sam":"1sa","firstsam":"1sa","1stsamuel":"1sa","firstsamuel":"1sa","1sa":"1sa","2s":"2sa","secondsamuel":"2sa","2ndsamuel":"2sa","2sam":"2sa","2sa":"2sa","secondsam":"2sa","2ndsam":"2sa","2samuel":"2sa","2sm":"2sa","firstkgs":"1ki","1stkings":"1ki","1stkgs":"1ki","1kings":"1ki","1kgs":"1ki","1k":"1ki","1ki":"1ki","1kin":"1ki","firstkings":"1ki","2k":"2ki","2ndkings":"2ki","2kin":"2ki","2ki":"2ki","2kgs":"2ki","2kings":"2ki","secondkings":"2ki","secondkgs":"2ki","2ndkgs":"2ki","1chron":"1ch","1chr":"1ch","1ch":"1ch","1stchron":"1ch","firstchron":"1ch","1stchronicles":"1ch","1chronicles":"1ch","firstchronicles":"1ch","2ndchronicles":"2ch","2chron":"2ch","2ch":"2ch","2chr":"2ch","2ndchron":"2ch","2chronicles":"2ch","secondchronicles":"2ch","secondchron":"2ch","ezr":"ezr","ezra":"ezr","ez":"ezr","neh":"neh","ne":"neh","nehemiah":"neh","addes":"est","restofesther":"est","aes":"est","est":"est","additionstoesther":"est","addesth":"est","therestofesther":"est","job":"job","jb":"job","psa":"psa","pss":"psa","psm":"psa","psalms":"psa","psalm":"psa","ps":"psa","pslm":"psa","prov":"pro","pro":"pro","proverbs":"pro","pr":"pro","prv":"pro","ecc":"ecc","eccles":"ecc","eccle":"ecc","qoh":"ecc","ecclesiastes":"ecc","ec":"ecc","canticleofcanticles":"sng","so":"sng","sng":"sng","canticles":"sng","sos":"sng","songofsolomon":"sng","cant":"sng","songofsongs":"sng","song":"sng","isa":"isa","is":"isa","isaiah":"isa","jr":"jer","jeremiah":"jer","jer":"jer","je":"jer","lam":"lam","la":"lam","lamentations":"lam","ezek":"ezk","ezk":"ezk","eze":"ezk","ezekiel":"ezk","daniel":"dan","dn":"dan","dan":"dan","da":"dan","ho":"hos","hosea":"hos","hos":"hos","joel":"jol","jl":"jol","jol":"jol","amo":"amo","am":"amo","amos":"amo","obadiah":"oba","ob":"oba","oba":"oba","obad":"oba","jonah":"jon","jon":"jon","jnh":"jon","micah":"mic","mc":"mic","mic":"mic","nah":"nam","nahum":"nam","na":"nam","nam":"nam","hab":"hab","hb":"hab","habakkuk":"hab","zp":"zep","zephaniah":"zep","zep":"zep","zeph":"zep","haggai":"hag","hag":"hag","hg":"hag","zech":"zec","zc":"zec","zechariah":"zec","zec":"zec","ml":"mal","mal":"mal","malachi":"mal","mat":"mat","matthew":"mat","matt":"mat","mt":"mat","mrk":"mrk","mark":"mrk","mk":"mrk","mr":"mrk","mar":"mrk","luk":"luk","lk":"luk","luke":"luk","joh":"jhn","jn":"jhn","john":"jhn","jhn":"jhn","ac":"act","act":"act","acts":"act","rom":"rom","rm":"rom","romans":"rom","ro":"rom","1corinthians":"1co","1cor":"1co","1co":"1co","firstcorinthians":"1co","1stcorinthians":"1co","2cor":"2co","2ndcorinthians":"2co","2corinthians":"2co","2co":"2co","secondcorinthians":"2co","ga":"gal","gal":"gal","galatians":"gal","eph":"eph","ephes":"eph","ephesians":"eph","philippians":"php","phil":"php","php":"php","pp":"php","colossians":"col","col":"col","co":"col","firstthess":"1th","1thessalonians":"1th","1thess":"1th","1thes":"1th","1stthessalonians":"1th","1stthess":"1th","1th":"1th","firstthessalonians":"1th","2thes":"2th","2ndthessalonians":"2th","2thess":"2th","2ndthess":"2th","2thessalonians":"2th","secondthess":"2th","secondthessalonians":"2th","2th":"2th","1ti":"1ti","firsttimothy":"1ti","firsttim":"1ti","1timothy":"1ti","1tim":"1ti","1sttimothy":"1ti","1sttim":"1ti","2timothy":"2ti","2ndtimothy":"2ti","2ti":"2ti","2tim":"2ti","secondtimothy":"2ti","2ndtim":"2ti","secondtim":"2ti","ti":"tit","tit":"tit","titus":"tit","pm":"phm","phm":"phm","philemon":"phm","philem":"phm","heb":"heb","hebrews":"heb","jas":"jas","jm":"jas","james":"jas","1pe":"1pe","firstpeter":"1pe","1pt":"1pe","1p":"1pe","1peter":"1pe","1stpeter":"1pe","1pet":"1pe","2pt":"2pe","2pe":"2pe","2peter":"2pe","2pet":"2pe","2p":"2pe","secondpeter":"2pe","2ndpeter":"2pe","1jn":"1jn","1j":"1jn","1jhn":"1jn","1john":"1jn","1jo":"1jn","1stjohn":"1jn","firstjohn":"1jn","1joh":"1jn","secondjohn":"2jn","2jhn":"2jn","2j":"2jn","2jo":"2jn","2jn":"2jn","2joh":"2jn","2john":"2jn","2ndjohn":"2jn","3jn":"3jn","3rdjohn":"3jn","3joh":"3jn","3john":"3jn","3j":"3jn","3jo":"3jn","thirdjohn":"3jn","3jhn":"3jn","jd":"jud","jude":"jud","jud":"jud","therevelation":"rev","rev":"rev","re":"rev","revelation":"rev","mostcommon:rev":"rev","tob":"tob","tb":"tob","tobit":"tob","jdth":"jdt","judith":"jdt","jdt":"jdt","jth":"jdt","ws":"wis","wisdom":"wis","wis":"wis","wisd.ofsol":"wis","wisdomofsolomon":"wis","sir":"sir","ecclus":"sir","ecclesiasticus":"sir","bar":"bar","baruch":"bar","1mac":"1ma","1m":"1ma","1macc":"1ma","1stmaccabees":"1ma","1maccabees":"1ma","firstmaccabees":"1ma","1ma":"1ma","2mac":"2ma","2maccabees":"2ma","2macc":"2ma","2ma":"2ma","2ndmaccabees":"2ma","2m":"2ma","secondmaccabees":"2ma"};
@@ -228,11 +279,23 @@
 			return data;
 		}
 
+		function copy(ele) {
+			navigator.clipboard.writeText(
+				ele.parentElement.parentElement.querySelector('.copy-text').innerText
+			);
+		}
+		function copyLink(ele) {
+			navigator.clipboard.writeText(
+				document.location.origin + document.location.pathname + '?' +
+				ele.parentElement.parentElement.querySelector('.copy-link').innerText
+			);
+		}
+
 		function parseNumbers(s) {
 			let resp = [];
 			for (const part of s.split(',')) {
 				if (part.includes('-')) {
-					const bounds = [part.split('-')[0], part.split('-').at(-1)].map(parseInt);
+					const bounds = [part.split('-')[0], part.split('-').at(-1)].map(Number);
 					if (bounds[0] >= bounds[1]) throw Error();
 					resp.push(...Array.from({ length: bounds[1]-bounds[0]+1 }, (_, n) => String(n+bounds[0])));
 				} else resp.push(part);
@@ -303,8 +366,9 @@
 			if (!c) return undefined;
 			if (c[n]) return verseBuild(t, b, cn, n, c[n]);
 
-			for (const k in Object.keys(c).filter(v => v.includes('-'))) {
-				if (parseNumbers(k).includes(Number(n))) return verseBuild(t, b, cn, k, c[k]);
+			for (const k of Object.keys(c).filter(v => v.includes('-'))) {
+				console.log(k, parseNumbers(k))
+				if (parseNumbers(k).includes(n)) return verseBuild(t, b, cn, k, c[k]);
 			}
 
 			return undefined;
@@ -338,7 +402,7 @@
 			return await scrapeChapters(t, b, chapters);
 		}
 		async function loadVerses(v) {
-			if (v[3]) return await scrapeVerses(...v);
+			if (v[3]) return await scrapeVerses(v[0], v[1], v[2][0], v[3]);
 			else if (v[2]) return await scrapeChapters(...v);
 			else return await scrapeBook(...v);
 		}
@@ -347,34 +411,66 @@
 			if (interlinear)
 				return verse.map(v => [v[1], v[2] ? `(${v[2]})`: null].filter(e => e).join(' ')).join(' ');
 			
-			let v = verse.replace(/<b>|<\/b>/g, '');
+			return verse;
+			// let v = verse.replace(/<b>|<\/b>/g, '');
 		}
 
-		function showVerse(parent, v) {
-			const verse = document.getElementById(`${v[2].interlinear ? 'il' : ''}verse-template`).cloneNode(true);
+		function showVerse(parent, v, nodupes=false) {
+			const verse = document.getElementById('verse-template').cloneNode(true);
 			verse.removeAttribute('id');
-			
-			_={
-				"short-canon": "ot",
-				"canon": "Old Testament",
-				"name": "Numbers",
-				"desc": "The Fourth Book of Moses called Numbers",
-				"interlinear": false
-			};
+			verse.hidden = false;
 
-			verse.querySelector('ref').innerText = `${v[2].name} ${v[3]}:${v[4]}`;
-			verse.querySelector('ch').innerText = v[6] || '';
-			verse.querySelector('vf').innerText = v[7] || '';
-			verse.querySelector('cf').innerText = v[8] || '';
+			const text = verse.querySelector('.text');
+			let vLink;
+			if (!v) verse.querySelector('.buttons').hidden = true;
+			else {
+				verse.querySelector('.ref').innerText = `${v[2].name} ${v[3]}:${v[4]} (${v[0].toUpperCase()})`;
+				verse.querySelector('.ch').innerText = v[6] || '';
+				verse.querySelector('.vf').innerText = v[7] || '';
+				verse.querySelector('.cf').innerText = v[8] || '';
 
-			if (v[2].interlinear) {}
-			else verse.querySelector('text').innerText = v[5] || '';
+				if (v[2].interlinear) {
+					text.classList.add('il');
+					if (v[2].rtl) text.classList.add('rtl');
 
-			verse.querySelector('copy-text').innerText = verseToText(v[5], v[2].interlinear);
-			verse.querySelector('copy-link').innerText = ``;
+					for (const [p, t, e] of [['', String(v[4]), ''], ...v[5]]) {
+						const word = document.createElement('div');
+						word.classList.add('word');
+						word.innerHTML = `<p class="p">${p || '&#x2800;'}</p><p class="t">${t || '&#x2800;'}</p><p class="e">${e || '&#x2800;'}</p>`;
+						text.appendChild(word);
+					}
+				}
+				else text.innerHTML = `<sup>${v[4]}</sup>${v[5]}`;
 
-			parent.appendChild(verse);
+				verse.querySelector('.copy-text').innerText = verseToText(v[5], v[2].interlinear);
+				vLink = `${v[0]}:${v[1]}:${v[3]}:${v[4]}`;
+				verse.querySelector('.copy-link').innerText = vLink;
+			}
+
+			if (
+				v && (!nodupes ||
+				vLink !== Array.from(parent.children)?.at(-1)?.querySelector('.copy-link')?.innerText
+			)) parent.appendChild(verse);
 		}
+
+		const wrapper = document.getElementById('texts');
+		async function init(code) {
+			const verseRefs = parseVerses(code);
+			for (const verses of verseRefs) {
+				const parent = document.createElement('div');
+				parent.classList.add('verses');
+				parent.style.setProperty('--cols', verses[0].length);
+				wrapper.appendChild(parent);
+
+				const verseTexts = await loadVerses(verses);
+				for (const v of verseTexts) {
+					showVerse(parent, v, verses[0].length === 1);
+				}
+			}
+		}
+
+		const code = window.location.search.slice(1);
+		init(code);
 	</script>
 </body>
 </html>
