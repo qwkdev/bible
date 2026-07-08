@@ -327,7 +327,7 @@
 				}
 
 				if (bookInfo.length < 1) throw Error();
-				const book2 = bookInfo.at(-1).replace(/[\s_-]/g, '');
+				const book2 = bookInfo.at(-1).replace(/[\s_-]/g, '').toLowerCase();
 				if (!BOOKKEYS.includes(book2)) throw Error();
 				decoded.book = BOOKS[book2];
 
