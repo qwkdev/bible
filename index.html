@@ -273,7 +273,7 @@
 			else if (Object.keys(cache[translation]).includes(book)) return cache[translation][book];
 
 			const actualBook = BOOKS[book.replace(/[\s_-]/g, '')];
-			const data = await fetch(`/text/${translation}/${actualBook}.json`).then(r => r.json());
+			const data = await fetch(`/text/${translation}/${actualBook}.json`).then(r => r.ok ? r.json() : null);
 			cache[translation][book] = data;
 
 			return data;
@@ -357,7 +357,7 @@
 		async function verseBuild(t, b, c, vn, v) {
 			return [
 				t, b,
-				(await getBook(t, b)).info,
+				(await getBook(t, b))?.info,
 				c, vn,
 				...Array.from({ length: 4 }, (_, i) => v[i] || null)
 			];
@@ -385,7 +385,7 @@
 			for (const n of c) {
 				const verses = new Set((await Promise.all(
 					t.map(async ct => Object.keys(
-						(await getBook(ct, b))?.[n]
+						(await getBook(ct, b))?.[n] || {}
 					))
 				)).flat().flatMap(v => parseNumbers(v)));
 				final.push(...await scrapeVerses(t, b, n, verses));
@@ -396,7 +396,7 @@
 			let final = [];
 			const chapters = new Set((await Promise.all(
 				t.map(async ct => Object.keys(
-					await getBook(ct, b)
+					(await getBook(ct, b)) || {}
 				).filter(k => k !== 'info'))
 			)).flat());
 			return await scrapeChapters(t, b, chapters);
