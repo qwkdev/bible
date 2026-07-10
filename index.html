@@ -331,7 +331,7 @@
 				if (!BOOKKEYS.includes(book2)) throw Error();
 				decoded.book = BOOKS[book2];
 
-				if (bookInfo.length >= 1) decoded.translations = bookInfo[0].split(',');
+				if (bookInfo.length > 1) decoded.translations = bookInfo[0].split(',');
 
 				if (verseInfo.length >= 2) {
 					decoded.chapters = [verseInfo[0]];
@@ -366,7 +366,6 @@
 			if (c[n]) return verseBuild(t, b, cn, n, c[n]);
 
 			for (const k of Object.keys(c).filter(v => v.includes('-'))) {
-				console.log(k, parseNumbers(k))
 				if (parseNumbers(k).includes(n)) return verseBuild(t, b, cn, k, c[k]);
 			}
 
@@ -470,8 +469,6 @@
 				wrapper.appendChild(parent);
 
 				const verseTexts = await loadVerses(verses);
-
-
 				for (const v of verseTexts) {
 					showVerse(parent, v, verses[0].length === 1);
 				}
