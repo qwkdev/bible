@@ -310,7 +310,7 @@
 				let bookInfo = [];
 				let verseInfo = [];
 				let decoded = {
-					translations: [],
+					translations: null,
 					book: null,
 					chapters: null,
 					verses: null
@@ -331,8 +331,7 @@
 				if (!BOOKKEYS.includes(book2)) throw Error();
 				decoded.book = BOOKS[book2];
 
-				if (bookInfo.length === 1) decoded.translations.push('il', 'gnbdk');
-				else decoded.translations.push(...bookInfo[0].split(','))
+				if (bookInfo.length >= 1) decoded.translations = bookInfo[0].split(',');
 
 				if (verseInfo.length >= 2) {
 					decoded.chapters = [verseInfo[0]];
@@ -456,13 +455,23 @@
 		const wrapper = document.getElementById('texts');
 		async function init(code) {
 			const verseRefs = parseVerses(code);
-			for (const verses of verseRefs) {
+			for (let verses of verseRefs) {
 				const parent = document.createElement('div');
 				parent.classList.add('verses');
+				if (!verses[0]) {
+					verses[0] = [];
+					for (const t of ['il', 'niv', 'gnbdk']) {
+						if (await getBook(t, verses[1])) verses[0].push(t);
+					}
+					verses[0] = verses[0].slice(0, 2);
+				}
+				
 				parent.style.setProperty('--cols', verses[0].length);
 				wrapper.appendChild(parent);
 
 				const verseTexts = await loadVerses(verses);
+
+
 				for (const v of verseTexts) {
 					showVerse(parent, v, verses[0].length === 1);
 				}
