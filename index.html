@@ -461,6 +461,7 @@
 					verses[0] = [];
 					for (const t of ['il', 'niv', 'gnbdk']) {
 						if (await getBook(t, verses[1])) verses[0].push(t);
+						if (verses[0].length >= 2) break;
 					}
 					verses[0] = verses[0].slice(0, 2);
 				}
