@@ -10,8 +10,64 @@ canon = {
 	'NT': ['nt', 'New Testament']
 }
 
+def parseSpan(ele):
+	if isinstance(ele, str):
+		return ['t', ele]
+	
+	for c in [
+		'chapternum',
+		'crossreference',
+		'indent-1-breaks'
+	]:
+		if c in ele['class']: return
+	
+	for c in [
+		'text',
+		'small-caps'
+	]:
+		if c in ele['class']: return ['t', ele.text]
+
+	if 'versenum' in ele['class']:
+		return ['n', ele.text.strip()]
+	if 'footnote' in ele['class']:
+		return ['f', ele.a['href'][1:]]
+	
+	else:
+		print('Unknown in span', ele['class'])
+
+def parseSpans(parent) -> list:
+	ctx = []
+	for span in parent.find_all('span', recursive=False):
+		for ele in span.children:
+			if isinstance(ele, str):
+				ctx.append(['t', ele])
+			elif 'woj' in ele['class']:
+				for ele2 in ele.children:
+					if (p := parseSpan(ele2)):
+						ctx.append(p)
+			elif (p := parseSpan(ele)):
+					ctx.append(p)
+
+	return ctx
+
+def getFootnotes(footnotes: dict, vf: list[str]) -> str | None:
+	out = []
+	for fid in vf:
+		fele = footnotes.find(id=fid)
+		if not fele: continue
+		fele = fele.find('span', class_='footnote-text')
+		if fele and fele.text:
+			out.append(fele.text)
+
+	return '; '.join(out) if out else None
+
 curbook = None
 data = {}
+
+def scrape(url: str, translation: str, chapterdata: dict) -> None:
+	global data, curbook
+
+	
 
 for translation in [
 	'NIV'
@@ -21,39 +77,88 @@ for translation in [
 
 	chapterdata = {BOOKS.get(i['display'].lower().replace(' ', '')): i['testament'] for i in rq.get(f'https://www.biblegateway.com/passage/bcv/?version={translation}').json()['data'][0]}
 	
-	# r = rq.get(f'https://www.biblegateway.com/passage/?search=Genesis%201&version={translation}').content
-	r = rq.get(f'https://www.biblegateway.com/passage/?search=1%20Chronicles%201&version={translation}').content
-	soup = BeautifulSoup(r, 'html.parser')
+	# url = f'/passage/?search=Genesis%201&version={translation}'
+	url = f'/passage/?search=Joshua%2012&version={translation}'
+	while url:
+		r = rq.get('https://www.biblegateway.com' + url).content
+		soup = BeautifulSoup(r, 'html.parser')
 
-	book = ' '.join(soup.select_one('.dropdown-display-text').text.split(' ')[:-1])
-	realbook = BOOKS.get(book.lower().replace(' ', ''))
-	if not realbook: raise Exception(f'Couldn\'t identify book {book}')
-	if realbook != curbook:
-		if curbook:
-			try: os.mkdir(f'scrape/{translation.lower()}')
-			except Exception: pass
+		ref = soup.select_one('.dropdown-display-text').text.split(' ')
+		chapter = ref[-1]
+		book = ' '.join(ref[:-1])
+		realbook = BOOKS.get(book.lower().replace(' ', ''))
+		if not realbook: raise Exception(f'Couldn\'t identify book {book}')
+		if realbook != curbook:
+			if curbook:
+				try: os.mkdir(f'scrape/{translation.lower()}')
+				except Exception: pass
 
-			with open(f'scrape/{translation.lower()}/{realbook}.json', 'w', encoding='utf-8') as f:
-				json.dump(data, f, separators=(',', ':'))
-			print(book)
+				with open(f'scrape/{translation.lower()}/{realbook}.json', 'w', encoding='utf-8') as f:
+					json.dump(data, f, separators=(',', ':'))
+				print(book)
 
-		data = {
-			'info': {
-				'short-canon': canon[chapterdata[realbook]][0],
-				'canon': canon[chapterdata[realbook]][1],
-				'name': book,
-				'desc': None,
-				'interlinear': False,
-				'rtl': False
+			data = {
+				'info': {
+					'short-canon': canon[chapterdata[realbook]][0],
+					'canon': canon[chapterdata[realbook]][1],
+					'name': book,
+					'desc': None,
+					'interlinear': False,
+					'rtl': False
+				}
 			}
-		}
+			curbook = realbook
 
-	text = [i for i in [
-		soup.select_one('.std-text'),
-		soup.select_one('.passage-text>div>div')
-	] if i][0]
+		if chapter not in data:
+			data[chapter] = {}
 
-	for child in text.children:
-		if not child.name: continue
-		print(child.name)
+		ctx = []
+
+		text = [i for i in [
+			soup.select_one('.std-text'),
+			soup.select_one('.passage-text>div>div')
+		] if i][0]
+
+		for child in text.children:
+			if not child.name: continue
+			if child.name == 'h3' or child.name == 'h4':
+				ctx.append(['h', child.text])
+			elif child.name == 'p':
+				ctx.extend(parseSpans(child))
+			elif child.name == 'div' and 'footnotes' not in child['class']:
+				for p in child.find_all('p', recursive=False):
+					ctx.extend(parseSpans(p))
+			else:
+				raise Exception('Unknown', book, child)
+		
+		footnotes = soup.find('div', class_='footnotes')
+
+		heading = None
+		versenum = '1'
+		verse = ''
+		vf = []
+
+		for i in ctx:
+			match i[0]:
+				case 'h':
+					heading = i[1]
+				case 't':
+					verse += i[1]
+				case 'f':
+					vf.append(i[1])
+				case 'n':
+					if i[1] != versenum:
+						data[chapter][versenum] = [verse, heading, getFootnotes(footnotes, vf)]
+
+						versenum = i[1]
+						verse = ''
+						vf = []
+						
+		data[chapter][versenum] = [verse, heading, getFootnotes(footnotes, vf)]
+		if (url := soup.find('a', class_='next-chapter')): url = url['href']
 	
+	try: os.mkdir(f'scrape/{translation.lower()}')
+	except Exception: pass
+
+	with open(f'scrape/{translation.lower()}/{realbook}.json', 'w', encoding='utf-8') as f:
+		json.dump(data, f, separators=(',', ':'))
